@@ -1,18 +1,15 @@
 # Base image
-FROM node:19 AS dependencies
+FROM --platform=linux/amd64 node:19-alpine AS dependencies
 WORKDIR /katrade
 COPY package*.json ./
 RUN npm install
 
-FROM node:19 AS builder
+FROM --platform=linux/amd64 node:19-alpine AS builder
 WORKDIR /katrade
 COPY . .
 COPY --from=dependencies /katrade/node_modules ./node_modules
-ENV NODE_OPTIONS=--max_old_space_size=16384
 RUN npm run build
 
-FROM node:19 AS runner
-WORKDIR /katrade
-COPY --from=builder /katrade/dist ./dist
+EXPOSE 8080
 
 CMD [ "node", "dist/main.js" ]
