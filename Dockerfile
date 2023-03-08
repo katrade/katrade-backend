@@ -9,7 +9,7 @@ WORKDIR /katrade
 COPY . .
 COPY --from=dependencies /katrade/node_modules ./node_modules
 RUN npm run build
-COPY ./src/templates ./dist
+COPY src/templates dist/
 
 EXPOSE 8080
 
